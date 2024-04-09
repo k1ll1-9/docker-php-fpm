@@ -8,6 +8,6 @@
     <title>Document</title>
 </head>
 <body>
-<?= "Testing Realm..." ?>
+<?= 'Test' ?>
 </body>
 </html>

@@ -3,14 +3,14 @@ services:
 
   php-fpm:
     build:
-      context: dockerfiles
-      dockerfile: php.dockerfile
+      context: ./docker/php/
+      dockerfile: Dockerfile
     image: php:8.2-fpm
     container_name: php-fpm
     working_dir: /var/www
     volumes:
-      - ./src:/var/www
-      - ./php/conf.d:/usr/local/etc/php/conf.d
+      - ./public:/var/www
+      - ./docker/php/conf.d:/usr/local/etc/php/conf.d
     networks:
       - app
 
@@ -21,15 +21,15 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./src:/var/www
-      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./public:/var/www
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d
     networks:
       - app
 
   mysql:
     image: mysql:5.7.22
     volumes:
-      - ./mysql:/var/lib/mysql
+      - ./docker/mysql:/var/lib/mysql
     container_name: mysql
     ports:
       - "3306:3306"
@@ -46,9 +46,11 @@ services:
     container_name: redis
     command: redis-server --appendonly yes
     volumes:
-      - ./storage/redis/data:/data
+      - ./docker/storage/redis/data:/data
     ports:
       - "6379:6379"
+    networks:
+      - app
 
 networks:
   app:
